@@ -30,22 +30,23 @@ public class URLService {
     }
 
     public List<String> getNewURLs () {
-        List<String> yesterdayURLS = yesterdayURLRepository.findAll().stream().map(YesterdayURL::getUrl).toList();
-        List<String>todayURLS = todayURLRepository.findAll().stream().map(TodayURL::getUrl).toList();
+        List<String> yesterdayURLS = yesterdayURLRepository.findAll().stream().map(YesterdayURL::getUrl).collect(Collectors.toList());
+        List<String>todayURLS = todayURLRepository.findAll().stream().map(TodayURL::getUrl).collect(Collectors.toList());
 
         return checkListForRepeat(todayURLS,yesterdayURLS);
     }
 
-    public List<YesterdayURL> getChangedURLs () {
+    public List<String> getChangedURLs () {
         List<YesterdayURL> yesterdayURLS = yesterdayURLRepository.findAll();
         List<TodayURL> todayURLS = todayURLRepository.findAll();
 
         return yesterdayURLS.stream().filter(y -> todayURLS.stream()
-                .allMatch(t -> t.getUrl().equals(y.getUrl()) && !t.getHtmlCode().equals(y.getHtmlCode())))
+                .anyMatch(t -> t.getUrl().equals(y.getUrl()) && !t.getHtmlCode().equals(y.getHtmlCode())))
+                .map(YesterdayURL::getUrl)
                 .collect(Collectors.toList());
     }
 
     private List<String> checkListForRepeat(List<String> list, List<String> checkList) {
-        return list.stream().filter(checkList::contains).collect(Collectors.toList());
+        return list.stream().filter(l -> !checkList.contains(l)).collect(Collectors.toList());
     }
 }

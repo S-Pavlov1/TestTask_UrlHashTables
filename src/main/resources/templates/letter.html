@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<p>Здравствуйте, дорогая [[${name}]]</p>
+<p>За последние сутки во ввреенных Вам сайтах произошли следующие изменения:</p>
+<div>
+    <div th:switch="${#lists.isEmpty(deletedURLs)}">
+        <p th:case="${true}">Никакие сайты не были удалены.</p>
+        <div th:case="${false}">
+            <p>Исчезли следующие страницы:</p>
+            <table>
+                <tr>
+                    <th>No</th>
+                    <th>URL</th>
+                </tr>
+                <tr th:each ="URL, state: ${deletedURLs}" >
+                    <td th:utext="${state.count}"></td>
+                    <td th:utext="${URL}"></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+<div>
+    <div th:switch="${#lists.isEmpty(newURLs)}">
+        <p th:case="${true}">Новых сайтов не появилось.</p>
+        <div th:case="${false}">
+            <p>Появились следующие новые страницы:</p>
+            <table>
+                <tr>
+                    <th>No</th>
+                    <th>URL</th>
+                </tr>
+                <tr th:each ="URL, state: ${newURLs}" >
+                    <td th:utext="${state.count}"></td>
+                    <td th:utext="${URL}"></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+<div>
+    <div th:switch="${#lists.isEmpty(changedURLs)}">
+        <p th:case="${true}">На сайтах не произошло изменений.</p>
+        <div th:case="${false}">
+            <p> Изменились следующие страницы:</p>
+            <table>
+                <tr>
+                    <th>No</th>
+                    <th>URL</th>
+                </tr>
+                <tr th:each ="URL, state: ${changedURLs}" >
+                    <td th:utext="${state.count}"></td>
+                    <td th:utext="${URL}"></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+<p>С уважением,</p>
+<p>автоматизированная система мониторинга.</p>
+</body>
+</html>
